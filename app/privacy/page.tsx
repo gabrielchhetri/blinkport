@@ -48,8 +48,19 @@ export default function PrivacyPage() {
           network logs under their own policies.
         </p>
         <p>
-          Blinkport does not currently include third-party advertising or analytics scripts. This
-          notice must be updated before any such services are enabled.
+          Blinkport uses Vercel Web Analytics to measure aggregate site traffic. Analytics may
+          process page-view timestamps, page paths, referring origins, approximate location, and
+          browser and device information. Before sending events, Blinkport removes query strings
+          and fragments, replaces unique share paths with a generic path, and excludes API routes.
+          The site also uses an origin-only referrer policy so page paths are not sent as referrer
+          information.
+        </p>
+        <p>
+          Vercel states that Web Analytics does not use cookies and uses a visitor hash that resets
+          within 24 hours. See the{" "}
+          <a href="https://vercel.com/docs/analytics/privacy-policy">Vercel Web Analytics privacy details</a>.
+          Blinkport does not currently display ads or use analytics for advertising or cross-site
+          ad targeting.
         </p>
       </section>
 

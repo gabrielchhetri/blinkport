@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import localFont from "next/font/local";
 
+import { SiteAnalytics } from "@/components/site-analytics";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { ToastProvider } from "@/components/toast-provider";
@@ -95,6 +96,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
             <SiteFooter />
           </div>
         </ToastProvider>
+        <SiteAnalytics />
       </body>
     </html>
   );
