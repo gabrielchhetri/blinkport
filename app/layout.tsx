@@ -33,6 +33,9 @@ export const metadata: Metadata = {
   description: siteDescription,
   applicationName: siteName,
   category: "developer tools",
+  verification: {
+    google: "QgxGPFjt5FGq__9ufCQe74Qmruk5m4tCApP4geHnfQg",
+  },
   alternates: {
     canonical: "/",
   },
