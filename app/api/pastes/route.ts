@@ -9,6 +9,7 @@ import {
   PasteInputError,
   TemporaryStorageError,
 } from "@/lib/paste-store";
+import { parseMultipartFormData } from "@/lib/multipart-form";
 import type { PasteMode } from "@/lib/types";
 
 export const runtime = "nodejs";
@@ -133,12 +134,13 @@ async function readBoundedBody(request: Request) {
 }
 
 async function parsePasteRequest(request: Request): Promise<ParsedPasteRequest> {
-  const contentType = request.headers.get("content-type")?.toLowerCase() ?? "";
+  const contentTypeHeader = request.headers.get("content-type") ?? "";
+  const contentType = contentTypeHeader.toLowerCase();
   const body = await readBoundedBody(request);
 
   if (contentType.includes("multipart/form-data")) {
     try {
-      const formData = await new Response(body, { headers: { "content-type": contentType } }).formData();
+      const formData = await parseMultipartFormData(body, request);
       const formString = (name: string, fallback = "") => readString(formData.get(name), fallback);
       const fileValue = formData.get("file");
       return {
@@ -149,7 +151,7 @@ async function parsePasteRequest(request: Request): Promise<ParsedPasteRequest> 
         title: formString("title"),
       };
     } catch {
-      return parseMultipartFallback(body, contentType);
+      return parseMultipartFallback(body, contentTypeHeader);
     }
   }
 

@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
 import test from "node:test";
 
+import { parseMultipartFormData } from "../lib/multipart-form.ts";
 import { validateLaunchConfig } from "../scripts/launch-preflight.mjs";
 import {
   consumeRateLimit,
@@ -21,6 +22,25 @@ function textPaste(content = "temporary test content") {
     title: `Test ${randomUUID()}`,
   };
 }
+
+test("parses multipart text when the boundary contains uppercase characters", async () => {
+  const boundary = "BlinkportBoundaryCase42";
+  const body = Buffer.from(
+    `--${boundary}\r\nContent-Disposition: form-data; name="mode"\r\n\r\ntext\r\n` +
+      `--${boundary}\r\nContent-Disposition: form-data; name="content"\r\n\r\nLive workflow test\r\n` +
+      `--${boundary}--\r\n`,
+  );
+  const request = new Request("https://blinkport.test/api/pastes", {
+    body,
+    headers: { "content-type": `multipart/form-data; boundary=${boundary}` },
+    method: "POST",
+  });
+
+  const formData = await parseMultipartFormData(body, request);
+
+  assert.equal(formData.get("mode"), "text");
+  assert.equal(formData.get("content"), "Live workflow test");
+});
 
 test("launch preflight accepts complete production settings", () => {
   assert.deepEqual(
